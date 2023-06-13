@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/dist/output.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="text-3xl font-bold underline">
+        SUMO -- Manual de Rede -- 
+      </h1>
+      <h2>O que é o SUMO?</h2>
+      <p>
+        SUMO é um software de simulação de tráfico de código aberto, 
+        foi criado pelo Centro Aeroespacial Alemão (DLR). O seu desenvolvimento começou em 2001,
+        você pode usar o SUMO para: criar uma rede e atribuir rotas dentro da rede,
+        desenvolver algoritmos de semáforo, simular e analisar o tráfego dentro de uma rede, dada a Matriz Origem-Destino (OD).</p>
+      <section>
+        <p>
+            1) Node file creation (.nod.xml)
+            * Criação de arquivo de nó *
+        </p>
+        <p>
+            2) Edge file creation (.edg.xml)
+            *Criação de arquivos de borda*
+        </p>
+        <p>
+            3) Edge type file creation (.type.xml)
+            *Criação de arquivo de tipo de borda*
+        </p>
+        <p>
+            4) Network creation from the node, edge and type files
+            *Criação de rede a partir dos arquivos de nó, borda e tipo*
+        </p>
+        <p>
+            5) Route file (.rou.xml)
+                *Arquivo de rota*
+        </p> 
+        <p>
+            Uma rede rodoviária consiste em nós (entroncamentos) e bordas (ou seja, estradas que conectam vários entroncamentos entre si).
+        </p>
+        <p>
+            1) Criação de arquivo de nó (.node.xml)
+        
+            <nodes>
+            <node id="n1" x="-500" y="0" type="priority"/>
+            <node id="n2" x="-250" y="0" type="traffic_light"/>
+            <node id="n3" x="-150" y="200" type="traffic-light"/>
+            <node id="n4" x="0" y="0"/>
+            <node id="n5" x="150" y="200"/>
+            </nodes>
+        </p>
+        <p>
+            
+            2) Criação de arquivo de borda, defina o nó de conexão junto com os links.
+        
+            <edges>
+            <edge from="n1" to="n2" id="1to2" type="3L45"/>
+            <edge from="n2" to="n3" id="2to3" type="2L15"/>
+            <edge from="n3" to="n4" id="3to4" type="3L30"/>
+            <edge from="n4" to="n5" id="out" type="3L30"/>
+            </edges>
+        </p>
+       
+        <p>
+            3) Tipo de Arquivo, incluir a prioridade da estrada, o número de faixas, limite de velocidade, tipo de veículos permitidos.
+        
+                <types>
+                <type id="3L45" priority="3" numLanes="3" speed="45"/>
+                <type id="2L15" priority="3" numLanes="2" speed="15"/>
+                <type id="3L30" priority="2" numLanes="3" speed="30"/>
+                </types>
+        </p>
+        
+        <p>
+            4) NETCONVERT
+            .node.xml + .edg.xml + .type.xml = .net.xml
+            
+            
+            netconvert --node-files .nod.xml -edge-files edg.xml -t .type.xml -o .net.xml
+            
+            *fazer a ligação via terminal*
+        </p>
+        
+        <p>
+            5) Arquivo de Rota
+        
+            <routes>
+            <vType accel="1.0"decel="5.0" id="Car" lenght="2.0" maxSpeed="100.0" sigma="0.0" />
+            <vType accel="1.0"decel="5.0" id="Bus" lenght="12.0" maxSpeed="1.0" sigma="0.0" />
+            
+            <route id="route0" edges="1to2 2to3 3to4 out"/>
+            <vehicle depart="10" id="veh0"route="route0" type="Bus" />
+            <route id="route1" edges="2to3 3to4"/>
+            <vehicle depart="10" id="veh1"route="route1" type="Car" />
+            <route id="route2" edges="3to4 out"/>
+            <vehicle depart="30" id="veh2"route="route2" type="Car" />
+            </routes>
+        
+        </p>
+        
+        <p>
+            6) SUMO cofiguration file
+        
+            <configuration>
+            (.sumocfg)
+            
+            <!--input --> 
+            <net-file value=".net.xml"/>
+            <route-files value=".rou.xml"/>
+            <!--input -->
+            <time>
+            <begin value="0"/>
+            <end value="2000"/>
+            </time>
+            </configuration>
+        </p>
+      </section>  
+</body>
+</html>
